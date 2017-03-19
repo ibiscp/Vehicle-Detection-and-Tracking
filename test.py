@@ -46,11 +46,9 @@ def plot_mosaic(random_samples, list_images, title):
 
 # Plot car examples
 car_random = random.sample(range(1, len(cars)), 25)
-plot_mosaic(car_random, cars, 'Example of cars')
 
 # Get n random numbers
 notcar_random = random.sample(range(1, len(notcars)), 25)
-plot_mosaic(notcar_random, notcars, 'Example of not cars')
 
 orient = 9  # HOG orientations
 pix_per_cell = 8 # HOG pixels per cell
@@ -114,11 +112,9 @@ def plot_hog_features(img, title, orient, pix_per_cell, cell_per_block, vis=True
 # Plot car example
 car_image = mpimg.imread(cars[np.random.randint(len(cars))])
 print("Image shape: {}".format(car_image.shape))
-plot_hog_features(car_image, "carhog", orient, pix_per_cell, cell_per_block, vis=True)
 
 # Plot not car example
 notcar_image = mpimg.imread(notcars[np.random.randint(len(notcars))])
-plot_hog_features(notcar_image, "carhog", orient, pix_per_cell, cell_per_block, vis=True)
 
 hist_bins = 32    # Number of histogram bins
 
@@ -136,7 +132,6 @@ def color_hist(img, nbins=32, bins_range=(0, 1)):
 
 car_image = mpimg.imread(cars[np.random.randint(len(cars))])
 hist_features = color_hist(car_image, nbins=hist_bins)
-plt.plot(hist_features)
 
 spatial_size = (32, 32) # Spatial binning dimensions
 
@@ -148,7 +143,6 @@ def bin_spatial(img, size=(32, 32)):
     return features
 
 features = bin_spatial(car_image, spatial_size)
-plt.plot(features)
 
 ### Tweak these parameters and see how the results change.
 color_space = 'YCrCb' # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
@@ -258,7 +252,6 @@ for i in car_random:
     img_file = stack_images[i]
     feature = X[i]
     norm_feature = scaled_X[i]
-    plot_scaled_features(img_file, feature, norm_feature)
 
 rand_state = np.random.randint(0, 100)
 X_train, X_test, y_train, y_test = train_test_split(
@@ -284,22 +277,29 @@ ystop = 656
 scale = 1.5
 
 # Function to convert image
-def convert_color(img, conv='RGB2YCrCb'):
-    if conv == 'RGB2YCrCb':
+def convert_color(img, conv):
+    if conv == 'YCrCb':
         return cv2.cvtColor(img, cv2.COLOR_RGB2YCrCb)
-    if conv == 'BGR2YCrCb':
+    if conv == 'YCrCb':
         return cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
-    if conv == 'RGB2LUV':
+    if conv == 'LUV':
         return cv2.cvtColor(img, cv2.COLOR_RGB2LUV)
+    if conv == 'HLS':
+        return cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
+    if conv == 'HSV':
+        return cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
+    else:
+        print("Convert function not defined")
 
 # Define a single function that can extract features using hog sub-sampling and make predictions
-def find_cars(img, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, cell_per_block, spatial_size, hist_bins):
+def find_cars(img, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell,
+              cell_per_block, spatial_size, hist_bins, color_space):
 
     draw_img = np.copy(img)
     img = img.astype(np.float32)/255
 
     img_tosearch = img[ystart:ystop,:,:]
-    ctrans_tosearch = convert_color(img_tosearch, conv='RGB2YCrCb')
+    ctrans_tosearch = convert_color(img_tosearch, color_space)
     if scale != 1:
         imshape = ctrans_tosearch.shape
         ctrans_tosearch = cv2.resize(ctrans_tosearch, (np.int(imshape[1]/scale), np.int(imshape[0]/scale)))
@@ -376,7 +376,7 @@ def apply_threshold(heatmap, threshold):
     # Return thresholded map
     return heatmap
 
-def draw_labeled_bboxes(img, labels):
+def get_labeled_bboxes(labels):
     # Iterate through all detected cars
     boxes = []
     for car_number in range(1, labels[1]+1):
@@ -388,16 +388,27 @@ def draw_labeled_bboxes(img, labels):
         # Define a bounding box based on min/max x and y
         bbox = ((np.min(nonzerox), np.min(nonzeroy)), (np.max(nonzerox), np.max(nonzeroy)))
         boxes.append(bbox)
+    # Return the boxes
+    return boxes
+
+def draw_bboxes(img, boxes):
+    for bbox in boxes:
+        xsize = bbox[1][0] - bbox[0][0]
+        ysize = bbox[1][1] - bbox[0][1]
+        maxsize = max(xsize, ysize)
+        # Update bbox
+        bboxcopy = ((bbox[0][0] - int((maxsize - xsize)/2), bbox[0][1] - int((maxsize - ysize)/2)),
+                    (bbox[1][0] + int((maxsize - xsize)/2), bbox[1][1] + int((maxsize - ysize)/2)))
         # Draw the box on the image
-        cv2.rectangle(img, bbox[0], bbox[1], (0,0,255), 6)
-    # Return the image
-    return img, boxes
+        cv2.rectangle(img, bboxcopy[0], bboxcopy[1], (0,0,255), 6)
+    return img
 
 # Read test image
 img = mpimg.imread('test_images/test1.jpg')
 
 # Find boxes
-out_img, box_list = find_cars(img, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, cell_per_block, spatial_size, hist_bins)
+out_img, box_list = find_cars(img, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell,
+                              cell_per_block, spatial_size, hist_bins, color_space)
 
 # Plot image
 plot_images(img, out_img, "Original", "Cars found", 'jet', 'jet')
@@ -416,7 +427,10 @@ heatmap = np.clip(heat, 0, 255)
 
 # Find final boxes from heatmap using label function
 labels = label(heatmap)
-draw_img, _ = draw_labeled_bboxes(np.copy(img), labels)
+boxes = get_labeled_bboxes(labels)
+
+# Draw boxes
+draw_img = draw_bboxes(np.copy(img), boxes)
 
 # Plot image
 plot_images(draw_img, heatmap, 'Car Positions', 'Heat Map', 'jet', 'hot')
@@ -440,8 +454,8 @@ def process_image(img):
     frame = Frame_vehicle()
 
     # Find boxes
-    out_img, frame.list_boxes = find_cars(img, ystart, ystop, scale, svc, X_scaler, orient,
-                                          pix_per_cell, cell_per_block, spatial_size, hist_bins)
+    out_img, frame.list_boxes = find_cars(img, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell,
+                                          cell_per_block, spatial_size, hist_bins, color_space)
 
     # Read in image similar to one shown above
     heat = np.zeros_like(img[:,:,0]).astype(np.float)
@@ -457,7 +471,19 @@ def process_image(img):
 
     # Find final boxes from heatmap using label function
     labels = label(heatmap)
-    draw_img, frame.list_vehicles = draw_labeled_bboxes(np.copy(img), labels)
+    frame.list_vehicles = get_labeled_bboxes(labels)
+
+    # Take average of the last 10 frames
+    a = []
+    for i in history[-10:]:
+        a.append(i.list_vehicles)
+    try:
+        frame.best_fit = int(np.mean(a, axis=0))
+    except:
+        frame.best_fit = frame.list_vehicles
+
+    # Draw boxes
+    draw_img = draw_bboxes(np.copy(img), frame.best_fit)
 
     # Save center points of detected vehicles
     list_centers = []
@@ -467,12 +493,6 @@ def process_image(img):
         list_centers.append((x, y))
     frame.centers = list_centers
 
-    # Take average of the last 10 frames
-    best_fits = []
-    for j in range(len(frame.list_vehicles)):
-        best_fit = ((np.mean([i.list_vehicles[j][0][0] for k in history[-10:]], axis=0), np.mean([i.list_vehicles[j][0][1] for k in history[-10:]], axis=0)),
-                     (np.mean([i.list_vehicles[j][1][0] for k in history[-10:]], axis=0), np.mean([i.list_vehicles[j][1][1] for k in history[-10:]], axis=0)))
-
     # Add data to history
     history.append(frame)
 
@@ -480,6 +500,7 @@ def process_image(img):
 
 # Import everything needed to edit/save/watch video clips
 from moviepy.editor import VideoFileClip
+from IPython.display import HTML
 
 history = []
 
