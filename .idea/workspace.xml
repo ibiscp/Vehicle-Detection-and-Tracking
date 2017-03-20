@@ -2,17 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4de43733-3add-4d55-b6cf-37ccea78747f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/output_images/Carsfound.png" afterPath="$PROJECT_DIR$/output_images/Carsfound.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/output_images/Exampleofcars.png" afterPath="$PROJECT_DIR$/output_images/Exampleofcars.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/output_images/Exampleofnotcars.png" afterPath="$PROJECT_DIR$/output_images/Exampleofnotcars.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/output_images/carhog.png" afterPath="$PROJECT_DIR$/output_images/carhog.png" />
+      <change type="DELETED" beforePath="D:\User\Documents\GitHub\Vehicle-Detection-and-Tracking\examples\HOG_example.jpg" afterPath="" />
+      <change type="DELETED" beforePath="D:\User\Documents\GitHub\Vehicle-Detection-and-Tracking\examples\bboxes_and_heat.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\User\Documents\GitHub\Vehicle-Detection-and-Tracking\examples\car_not_car.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\User\Documents\GitHub\Vehicle-Detection-and-Tracking\examples\labels_map.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\User\Documents\GitHub\Vehicle-Detection-and-Tracking\examples\output_bboxes.png" afterPath="" />
+      <change type="DELETED" beforePath="D:\User\Documents\GitHub\Vehicle-Detection-and-Tracking\examples\sliding_window.jpg" afterPath="" />
+      <change type="DELETED" beforePath="D:\User\Documents\GitHub\Vehicle-Detection-and-Tracking\examples\sliding_windows.jpg" afterPath="" />
+      <change type="DELETED" beforePath="D:\User\Documents\GitHub\Vehicle-Detection-and-Tracking\writeup_template.md" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project_video_output.mp4" afterPath="$PROJECT_DIR$/project_video_output.mp4" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test_video_output.mp4" afterPath="$PROJECT_DIR$/test_video_output.mp4" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.ipynb_checkpoints/Vehicle-Detection-and-Tracking-checkpoint.ipynb" afterPath="$PROJECT_DIR$/.ipynb_checkpoints/Vehicle-Detection-and-Tracking-checkpoint.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Vehicle-Detection-and-Tracking.ipynb" afterPath="$PROJECT_DIR$/Vehicle-Detection-and-Tracking.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test.py" afterPath="$PROJECT_DIR$/test.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/writeup_template.md" afterPath="$PROJECT_DIR$/writeup_template.md" />
     </list>
     <ignored path="Vehicle-Detection-and-Tracking.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -346,7 +345,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.39215687" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39215687" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
