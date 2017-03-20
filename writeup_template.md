@@ -14,96 +14,107 @@ The data of [vehicle](https://s3.amazonaws.com/udacity-sdc/Vehicle_Tracking/vehi
 
 The total amout of images on the dataset is 8792 for vehicles and 8968 for non-vehicle, which represents a good balanced dataset.
 
-Bellow if presented sample images for both classes:
+In the image bellow is presented sample images for both classes:
 
 <p align="center"><img src="output_images/Exampleofcars.png"/></p>
 
+<p align="center"><img src="output_images/Exampleofnotcars.png"/></p>
 
+## Features
+In order to train the classifier to recognize de difference between vehicle and not vehicle it is necessary to utilize some features. In this project three features are being used (HOG, color histogram and spatial).
 
+### Histogram of Oriented Gradients (HOG)
+One of the features used is the Histogram of Oriented Gradients with the following parameters:
 
+```python
+orient = 9  # HOG orientations
+pix_per_cell = 8 # HOG pixels per cell
+cell_per_block = 2 # HOG cells per block
+hog_channel = "ALL" # Can be 0, 1, 2, or "ALL"
+```
 
+Bellow is presented HOG features extracted:
 
+<p align="center"><img src="output_images/carhog.png"/></p>
+<p align="center"><img src="output_images/notcarhog.png"/></p>
 
+### Color Histogram
+In addition to the HOG features, the color histogram was also added to the feature vector.
 
-[//]: # (Image References)
-[image1]: ./examples/car_not_car.png
-[image2]: ./examples/HOG_example.jpg
-[image3]: ./examples/sliding_windows.jpg
-[image4]: ./examples/sliding_window.jpg
-[image5]: ./examples/bboxes_and_heat.png
-[image6]: ./examples/labels_map.png
-[image7]: ./examples/output_bboxes.png
-[video1]: ./project_video.mp4
+```python
+hist_bins = 32    # Number of histogram bins
+```
 
-###Histogram of Oriented Gradients (HOG)
+<p align="center"><img src="output_images/colorhistogram.png"/></p>
 
-####1. Explain how (and identify where in your code) you extracted HOG features from the training images.
+### Spatial Binning of Colors
+The last feature extracted from the images is spatial binning of colors with the following parameters:
 
-The code for this step is contained in the first code cell of the IPython notebook (or in lines # through # of the file called `some_file.py`).  
+```python
+spatial_size = (32, 32) # Spatial binning dimensions
+color_space = 'YCrCb' # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
+```
 
-I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
+<p align="center"><img src="output_images/binnedcolor.png"/></p>
 
-![alt text][image1]
+### Scaled Features
+After extracting all the features, they are grouped in one single vector to train the classifier. However there is one more step to be done, these features have different values and it needs to be normalized.
 
-I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`).  I grabbed random images from each of the two classes and displayed them to get a feel for what the `skimage.hog()` output looks like.
+Bellow is presented a comparision between raw and normalized features for 5 different images:
 
-Here is an example using the `YCrCb` color space and HOG parameters of `orientations=8`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
+<p align="center"><img src="output_images/scaled_feature_1.png"/></p>
+<p align="center"><img src="output_images/scaled_feature_2.png"/></p>
+<p align="center"><img src="output_images/scaled_feature_3.png"/></p>
+<p align="center"><img src="output_images/scaled_feature_4.png"/></p>
+<p align="center"><img src="output_images/scaled_feature_5.png"/></p>
 
+## Classifier
+The classifier used for this project is the `LinearSVC` and the result obtained was the following:
 
-![alt text][image2]
+```
+Using: 9 orientations 8 pixels per cell and 2 cells per block
+Feature vector length: 8460
+24.93 Seconds to train SVC...
+Test Accuracy of SVC =  0.9885
+```
 
-####2. Explain how you settled on your final choice of HOG parameters.
+## Sliding Window
+In order to extract features, a sliding window is implemented. It basically segments the image and analyze piece by piece, saving the positions where it found a vehicle.
 
-I tried various combinations of parameters and...
+In image bellow, the segmentation is illustrated, the concept here is to use small cells for the upper part of the road, where the vehicles are smaller and big cells for the botton part, where vehicles are closer.
 
-####3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
+```python
+x_start_stops = [[None,None],
+                 [None, None],
+                 [None, None]]
+y_start_stops = [[420,650],
+                 [400,575],
+                 [375,500]]
+xy_windows = [(240,150),
+              (120,96),
+              (60,48)]
+xy_overlaps = [(0.75, 0.55),
+               (0.75, 0.5),
+               (0.75, 0.5)]
+```
 
-I trained a linear SVM using...
+<p align="center"><img src="output_images/SlidingWindow.png"/></p>
 
-###Sliding Window Search
+## Find cars and heatmap image
+After all functions implemented, it is possible to git an image as input, extract the features using the sliding window, classify it with the trained classifier and plot the boxes were the classifier identified as vehicle.
 
-####1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
+<p align="center"><img src="output_images/Carsfound.png"/></p>
 
-I decided to search random window positions at random scales all over the image and came up with this (ok just kidding I didn't actually ;):
+In order to remove false positives, a heatmap is created and a threshold aplied, resulting the image bellow.
 
-![alt text][image3]
+<p align="center"><img src="output_images/HeatMap.png"/></p>
 
-####2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
+## Results
+This project was much more simpler to implement, because Udacity provided a lot of examples, so the hard work was to tune the parameters and try different things.
 
-Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
+Bellow is presented a video containing the output result for the given video.
 
-![alt text][image4]
----
+## Discussion
+The algorithm was tested in the video provided by Udacity, and a good result was obtained, however it fails for some frames.
 
-### Video Implementation
-
-####1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
-Here's a [link to my video result](./project_video.mp4)
-
-
-####2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
-
-I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap.  I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected.  
-
-Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
-
-### Here are six frames and their corresponding heatmaps:
-
-![alt text][image5]
-
-### Here is the output of `scipy.ndimage.measurements.label()` on the integrated heatmap from all six frames:
-![alt text][image6]
-
-### Here the resulting bounding boxes are drawn onto the last frame in the series:
-![alt text][image7]
-
-
-
----
-
-###Discussion
-
-####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
-
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
-
+In order to improve the results I would train it with more examples of vehicles and not-vehicles, as well as extracted more features from the images.

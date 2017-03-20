@@ -424,6 +424,7 @@ heat = apply_threshold(heat,1)
 
 # Visualize the heatmap when displaying
 heatmap = np.clip(heat, 0, 255)
+im_color = cv2.applyColorMap(heatmap, cv2.COLORMAP_HOT)
 
 # Find final boxes from heatmap using label function
 labels = label(heatmap)
