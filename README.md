@@ -21,7 +21,7 @@ In the image bellow is presented sample images for both classes:
 <p align="center"><img src="output_images/Exampleofnotcars.png"/></p>
 
 ## Features
-In order to train the classifier to recognize de difference between vehicle and not vehicle it is necessary to utilize some features. In this project three features are being used (HOG, color histogram and spatial).
+In order to train the classifier to recognize de difference between vehicle and not vehicle it is necessary to use some features. In this project three features are being used (HOG, color histogram and spatial).
 
 ### Histogram of Oriented Gradients (HOG)
 One of the features used is the Histogram of Oriented Gradients with the following parameters:
@@ -58,9 +58,9 @@ color_space = 'YCrCb' # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
 <p align="center"><img src="output_images/binnedcolor.png"/></p>
 
 ### Scaled Features
-After extracting all the features, they are grouped in one single vector to train the classifier. However there is one more step to be done, these features have different values and it needs to be normalized.
+After extracting all the features, they are grouped in one single vector to train the classifier, however there is one more step to be done, these features have different values and it needs to be normalized.
 
-Bellow is presented a comparision between raw and normalized features for 5 different images:
+Bellow is presented a comparision between raw and normalized features for five different images:
 
 <p align="center"><img src="output_images/scaled_feature_1.png"/></p>
 <p align="center"><img src="output_images/scaled_feature_2.png"/></p>
@@ -101,7 +101,7 @@ xy_overlaps = [(0.75, 0.55),
 <p align="center"><img src="output_images/SlidingWindow.png"/></p>
 
 ## Find cars and heatmap image
-After all functions implemented, it is possible to git an image as input, extract the features using the sliding window, classify it with the trained classifier and plot the boxes were the classifier identified as vehicle.
+After all functions implemented, it is possible to get an image as input, extract the features using the sliding window, classify it with the trained classifier and plot the boxes where the classifier identified as vehicle.
 
 <p align="center"><img src="output_images/Carsfound.png"/></p>
 
@@ -110,11 +110,13 @@ In order to remove false positives, a heatmap is created and a threshold aplied,
 <p align="center"><img src="output_images/HeatMap.png"/></p>
 
 ## Results
-This project was much more simpler to implement, because Udacity provided a lot of examples, so the hard work was to tune the parameters and try different things.
+This project was much more simpler to implement because Udacity provided a lot of examples, so the hard work was to tune the parameters and try different things.
 
 Bellow is presented a video containing the output result for the given video.
 
 ## Discussion
-The algorithm was tested in the video provided by Udacity, and a good result was obtained, however it fails for some frames.
+The algorithm was tested in the video provided by Udacity, and a good result was obtained. However it fails for some frames.
 
 In order to improve the results I would train it with more examples of vehicles and not-vehicles, as well as extracted more features from the images.
+
+Another thing that I still have to improve is to not recalculate the HOG features for each window and just cut the portion that I need from the HOG features calculated for the whole image.
