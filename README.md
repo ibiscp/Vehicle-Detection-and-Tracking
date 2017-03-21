@@ -84,18 +84,18 @@ In order to extract features, a sliding window is implemented. It basically segm
 In image bellow, the segmentation is illustrated, the concept here is to use small cells for the upper part of the road, where the vehicles are smaller and big cells for the botton part, where vehicles are closer.
 
 ```python
-x_start_stops = [[None,None],
-                 [None, None],
-                 [None, None]]
+x_start_stops = [[None,None],  # red
+                 [250, None], # green
+                 [400, None]]   # blue
 y_start_stops = [[420,650],
                  [400,575],
                  [375,500]]
-xy_windows = [(240,150),
-              (120,96),
-              (60,48)]
-xy_overlaps = [(0.75, 0.55),
-               (0.75, 0.5),
-               (0.75, 0.5)]
+xy_windows = [(150,150),
+              (100,100),
+              (60,60)]
+xy_overlaps = [(0.8, 0.8),
+               (0.8, 0.8),
+               (0.8, 0.8)]
 ```
 
 <p align="center"><img src="output_images/SlidingWindow.png"/></p>
@@ -113,6 +113,8 @@ In order to remove false positives, a heatmap is created and a threshold aplied,
 This project was much more simpler to implement because Udacity provided a lot of examples, so the hard work was to tune the parameters and try different things.
 
 Bellow is presented a video containing the output result for the given video.
+
+<p align="center">[![Vehicle Detection and Tracking](https://i.ytimg.com/vi/u_IQnYZBrWA/hqdefault.jpg)](https://youtu.be/u_IQnYZBrWA)
 
 ## Discussion
 The algorithm was tested in the video provided by Udacity, and a good result was obtained. However it fails for some frames.
