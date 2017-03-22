@@ -114,7 +114,7 @@ This project was much more simpler to implement because Udacity provided a lot o
 
 Bellow is presented a video containing the output result for the given video.
 
-<p align="center">[![Vehicle Detection and Tracking](https://i.ytimg.com/vi/u_IQnYZBrWA/hqdefault.jpg)](https://youtu.be/u_IQnYZBrWA)
+[![Vehicle Detection and Tracking](https://i.ytimg.com/vi/u_IQnYZBrWA/hqdefault.jpg)](https://www.youtube.com/watch?v=u_IQnYZBrWA)
 
 ## Discussion
 The algorithm was tested in the video provided by Udacity, and a good result was obtained. However it fails for some frames.
